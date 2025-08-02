@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Trend Predictor</title>
+    <link rel="stylesheet" href="static\style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube Trend Predictor</h1>
+        <p class="subtitle">Predict YouTube video performance using machine learning</p>
+        
+        <form id="predictionForm">
+            <div class="form-group">
+                <label for="modelSelect">Select Prediction Type:</label>
+                <select id="modelSelect" name="model" required>
+                    <option value="">Choose a model...</option>
+                    <option value="model1">View Count Prediction</option>
+                    <option value="model2">Subscribers Prediction</option>
+                    <option value="model3">Popularity Class (Low/Medium/High)</option>
+                    <option value="model4">Trending Status (Successful/Unsuccessful)</option>
+                </select>
+            </div>
+
+            <!-- Common fields for all models -->
+            <div class="field-section" id="commonFields" style="display: none;">
+                <h3>Basic Video Information</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="videoAge">Video Age (days):</label>
+                        <input type="number" id="videoAge" name="video_age_days" min="0" max="3650" required>
+                        <small>How many days since the video was published</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="titleLength">Title Length (words):</label>
+                        <input type="number" id="titleLength" name="title_length_words" min="1" max="50" required>
+                        <small>Number of words in video title</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="titleSentiment">Title Sentiment:</label>
+                        <select id="titleSentiment" name="title_sentiment" required>
+                            <option value="">Select sentiment...</option>
+                            <option value="positive">Positive</option>
+                            <option value="negative">Negative</option>
+                            <option value="neutral">Neutral</option>
+                        </select>
+                        <small>Overall emotional tone of the title</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="categoryId">Category ID:</label>
+                        <select id="categoryId" name="category_id" required>
+                            <option value="">Select category...</option>
+                            <option value="1">Film & Animation</option>
+                            <option value="2">Autos & Vehicles</option>
+                            <option value="10">Music</option>
+                            <option value="15">Pets & Animals</option>
+                            <option value="17">Sports</option>
+                            <option value="19">Travel & Events</option>
+                            <option value="20">Gaming</option>
+                            <option value="22">People & Blogs</option>
+                            <option value="23">Comedy</option>
+                            <option value="24">Entertainment</option>
+                            <option value="25">News & Politics</option>
+                            <option value="26">Howto & Style</option>
+                            <option value="27">Education</option>
+                            <option value="28">Science & Technology</option>
+                        </select>
+                        <small>YouTube video category</small>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="likeCount">Like Count:</label>
+                        <input type="number" id="likeCount" name="like_count" min="0" required>
+                        <small>Number of likes on the video</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subscriberCount">Subscriber Count:</label>
+                        <input type="number" id="subscriberCount" name="subscriber_count" min="0" required>
+                        <small>Channel's total subscribers</small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="region">Region:</label>
+                    <select id="region" name="region" required>
+                        <option value="">Select region...</option>
+                        <option value="us">United States (US)</option>
+                        <option value="in">India (IN)</option>
+                        <option value="gb">United Kingdom (GB)</option>
+                        <option value="ca">Canada (CA)</option>
+                        <option value="de">Germany (DE)</option>
+                        <option value="fr">France (FR)</option>
+                        <option value="jp">Japan (JP)</option>
+                        <option value="kr">South Korea (KR)</option>
+                        <option value="mx">Mexico (MX)</option>
+                        <option value="ru">Russia (RU)</option>
+                    </select>
+                    <small>YouTube trending region</small>
+                </div>
+            </div>
+
+            <!-- Model 1 specific fields -->
+            <div class="field-section" id="model1Fields" style="display: none;">
+                <h3>View Count Prediction - Additional Data</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="viewCount1">Current View Count:</label>
+                        <input type="number" id="viewCount1" name="view_count" min="0">
+                        <small>Current number of views (for ratio calculation)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="likeViewRatio1">Like-View Ratio (%):</label>
+                        <input type="number" id="likeViewRatio1" name="like_view_ratio_percent" min="0" max="100" step="0.01">
+                        <small>Percentage of views that resulted in likes</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model 2 specific fields -->
+            <div class="field-section" id="model2Fields" style="display: none;">
+                <h3>Subscriber Prediction - Additional Data</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="viewCount2">View Count:</label>
+                        <input type="number" id="viewCount2" name="view_count" min="0">
+                        <small>Total video views</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="likeViewRatio2">Like-View Ratio (%):</label>
+                        <input type="number" id="likeViewRatio2" name="like_view_ratio_percent" min="0" max="100" step="0.01">
+                        <small>Engagement ratio percentage</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="commentCount2">Comment Count:</label>
+                    <input type="number" id="commentCount2" name="comment_count" min="0">
+                    <small>Number of comments on the video</small>
+                </div>
+            </div>
+
+            <!-- Model 3 specific fields -->
+            <div class="field-section" id="model3Fields" style="display: none;">
+                <h3>Popularity Classification - Additional Data</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="viewCount3">View Count:</label>
+                        <input type="number" id="viewCount3" name="view_count" min="0">
+                        <small>Total video views for classification</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="commentCount3">Comment Count:</label>
+                        <input type="number" id="commentCount3" name="comment_count" min="0">
+                        <small>Total comments received</small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Model 4 specific fields -->
+            <div class="field-section" id="model4Fields" style="display: none;">
+                <h3>Trending Status - Additional Data</h3>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="viewCount4">View Count:</label>
+                        <input type="number" id="viewCount4" name="view_count" min="0">
+                        <small>Current view count(optional)</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="commentCount4">Comment Count:</label>
+                        <input type="number" id="commentCount4" name="comment_count" min="0">
+                        <small>Total engagement comments</small>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" id="predictBtn" style="display: none;">
+                <span id="buttonText">Get Prediction</span>
+                <span id="loadingSpinner" style="display: none;">🔄 Processing...</span>
+            </button>
+        </form>
+
+        <div id="result" style="display: none;">
+            <h3>Prediction Result</h3>
+            <div id="resultContent">
+                <p id="resultText"></p>
+                <div id="modelInfo"></div>
+            </div>
+        </div>
+
+        <div class="info-section">
+            <h3>Model Information</h3>
+            <div class="model-cards">
+                <div class="model-card">
+                    <h4>View Count Predictor</h4>
+                    <p>Predicts expected view count using 10 features including engagement metrics</p>
+                </div>
+                <div class="model-card">
+                    <h4>Subscriber Predictor</h4>
+                    <p>Estimates subscriber count using 26 features with advanced engagement analysis</p>
+                </div>
+                <div class="model-card">
+                    <h4>Popularity Classifier</h4>
+                    <p>Classifies videos as Low, Medium, or High popularity based on performance metrics</p>
+                </div>
+                <div class="model-card">
+                    <h4>Trending Status</h4>
+                    <p>Determines if a video will be Successful or Unsuccessful in trending</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="static\script.js"></script>
+</body>
+</html>
